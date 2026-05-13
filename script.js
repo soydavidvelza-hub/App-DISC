@@ -61,7 +61,9 @@ const dimInfo = {
 // ===== FUNCTIONS =====
 function startTest() {
   const name = document.getElementById('user-name').value.trim();
+  const email = document.getElementById('user-email').value.trim();
   if (!name) { document.getElementById('user-name').focus(); document.getElementById('user-name').style.borderColor='#ef4444'; return; }
+  if (!email) { document.getElementById('user-email').focus(); document.getElementById('user-email').style.borderColor='#ef4444'; return; }
   answers = questions.map(() => ({ mas: null, menos: null }));
   currentQ = 0;
   document.getElementById('welcome-screen').classList.remove('active');
