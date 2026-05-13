@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Personalidad DISC | Evaluación de Dominancia Cerebral</title>
+    <meta name="description" content="Descubre tu perfil de personalidad DISC. Evaluación profesional de Dominancia, Influencia, Estabilidad y Cumplimiento. Resultados inmediatos y gratuitos.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+    <!-- ===== WELCOME SCREEN ===== -->
+    <section id="welcome-screen" class="screen active">
+        <div class="welcome-container">
+            <div class="logo-badge">
+                <div class="logo-icon">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <circle cx="24" cy="24" r="20" stroke="url(#grad1)" stroke-width="3" fill="none"/>
+                        <path d="M16 24 L24 16 L32 24 L24 32 Z" fill="url(#grad1)" opacity="0.8"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="0" y1="0" x2="48" y2="48">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#a855f7"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">DISC Profile</span>
+            </div>
+
+            <h1 class="welcome-title">
+                Descubre tu Perfil de <span class="gradient-text">Personalidad</span>
+            </h1>
+            <p class="welcome-subtitle">
+                Evalúa tus dimensiones de comportamiento: Dominancia, Influencia, Estabilidad y Cumplimiento. 
+                Obtén resultados inmediatos sobre tu estilo conductual.
+            </p>
+
+            <div class="disc-preview">
+                <div class="disc-card dc-d">
+                    <div class="dc-letter">D</div>
+                    <div class="dc-name">Dominancia</div>
+                    <div class="dc-desc">Resultados y decisiones</div>
+                </div>
+                <div class="disc-card dc-i">
+                    <div class="dc-letter">I</div>
+                    <div class="dc-name">Influencia</div>
+                    <div class="dc-desc">Personas y entusiasmo</div>
+                </div>
+                <div class="disc-card dc-s">
+                    <div class="dc-letter">S</div>
+                    <div class="dc-name">Estabilidad</div>
+                    <div class="dc-desc">Ritmo y cooperación</div>
+                </div>
+                <div class="disc-card dc-c">
+                    <div class="dc-letter">C</div>
+                    <div class="dc-name">Cumplimiento</div>
+                    <div class="dc-desc">Precisión y calidad</div>
+                </div>
+            </div>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-icon">⏱</div>
+                    <div class="info-text">
+                        <strong>10 minutos</strong>
+                        <span>Tiempo estimado</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📋</div>
+                    <div class="info-text">
+                        <strong>28 preguntas</strong>
+                        <span>Formato clásico</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🎯</div>
+                    <div class="info-text">
+                        <strong>Resultados</strong>
+                        <span>Inmediatos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User info form -->
+            <div class="user-form">
+                <h3 class="form-title">Información del participante</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="user-name">Nombre completo</label>
+                        <input type="text" id="user-name" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Correo electrónico</label>
+                        <input type="email" id="user-email" placeholder="tu@email.com">
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-btn" class="btn-primary" onclick="startTest()">
+                <span>Comenzar Evaluación</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+
+            <p class="disclaimer">
+                No hay respuestas correctas o incorrectas. Responde de forma espontánea y honesta, pensando en tu comportamiento habitual en el entorno laboral.
+            </p>
+        </div>
+    </section>
+
+    <!-- ===== TEST SCREEN ===== -->
+    <section id="test-screen" class="screen">
+        <div class="test-container">
+            <!-- Top bar -->
+            <div class="test-topbar">
+                <div class="topbar-left">
+                    <span class="logo-mini">DISC</span>
+                    <span class="question-counter" id="question-counter">Pregunta 1 de 28</span>
+                </div>
+                <div class="topbar-right">
+                    <span class="timer" id="timer">00:00</span>
+                </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="progress-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="progress-pct" id="progress-pct">0%</span>
+            </div>
+
+            <!-- Instructions -->
+            <div class="test-instructions">
+                <p>De las cuatro opciones, selecciona la que es <strong>"Más como yo"</strong> y la que es <strong>"Menos como yo"</strong>.</p>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card" id="question-card">
+                <!-- Rendered by JS -->
+            </div>
+
+            <!-- Navigation -->
+            <div class="test-nav">
+                <button class="btn-secondary" id="prev-btn" onclick="prevQuestion()" disabled>
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path d="M16 10H4M4 10L9 5M4 10L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Anterior</span>
+                </button>
+                <button class="btn-primary" id="next-btn" onclick="nextQuestion()">
+                    <span>Siguiente</span>
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== RESULTS SCREEN ===== -->
+    <section id="results-screen" class="screen">
+        <div class="results-container">
+            <div class="results-header">
+                <h2 class="results-title">Tu Perfil <span class="gradient-text">DISC</span></h2>
+                <p class="results-user" id="results-user-name"></p>
+                <p class="results-date" id="results-date"></p>
+            </div>
+
+            <!-- Main Profile Type -->
+            <div class="profile-badge" id="profile-badge">
+                <!-- Rendered by JS -->
+            </div>
+
+            <!-- DISC Chart -->
+            <div class="chart-section">
+                <h3 class="section-title">Gráfico de Perfil</h3>
+                <div class="chart-tabs">
+                    <button class="chart-tab active" data-chart="mas" onclick="switchChart('mas')">Perfil Público (Más)</button>
+                    <button class="chart-tab" data-chart="menos" onclick="switchChart('menos')">Perfil Natural (Menos)</button>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="disc-chart" width="600" height="320"></canvas>
+                </div>
+            </div>
+
+            <!-- Dimension Details -->
+            <div class="dimensions-section">
+                <h3 class="section-title">Análisis por Dimensión</h3>
+                <div class="dimensions-grid" id="dimensions-grid">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- High & Low -->
+            <div class="dominance-section">
+                <h3 class="section-title">Dominancias</h3>
+                <div class="dominance-grid">
+                    <div class="dominance-card high" id="high-dominance">
+                        <div class="dom-header">
+                            <span class="dom-icon">▲</span>
+                            <span class="dom-label">Alta Dominancia</span>
+                        </div>
+                        <div class="dom-content" id="high-dom-content"></div>
+                    </div>
+                    <div class="dominance-card low" id="low-dominance">
+                        <div class="dom-header">
+                            <span class="dom-icon">▼</span>
+                            <span class="dom-label">Baja Dominancia</span>
+                        </div>
+                        <div class="dom-content" id="low-dom-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Characteristics -->
+            <div class="characteristics-section" id="characteristics-section">
+                <h3 class="section-title">Características de tu Perfil</h3>
+                <div class="chars-grid" id="chars-grid">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="results-actions">
+                <button class="btn-primary" onclick="downloadResults()">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 3V13M10 13L6 9M10 13L14 9M3 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Descargar Resultados</span>
+                </button>
+                <button class="btn-secondary" onclick="resetTest()">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 10C3 6.13 6.13 3 10 3C13.87 3 17 6.13 17 10C17 13.87 13.87 17 10 17C7.94 17 6.08 16.11 4.81 14.69" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M3 6V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Hacer de Nuevo</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
