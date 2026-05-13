@@ -1,6 +1,6 @@
 // ===== WEBHOOK CONFIG =====
 // Cambia esta URL por tu webhook de N8N, Make, Zapier, etc.
-const WEBHOOK_URL = 'https://TU-WEBHOOK-URL-AQUI';
+const WEBHOOK_URL = 'https://hook.eu1.make.com/lttce3uts9dogu8eaw7fos1h5jw3j7st';
 
 // ===== DISC TEST DATA =====
 const questions = [
