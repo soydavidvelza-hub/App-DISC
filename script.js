@@ -358,24 +358,33 @@ function renderCharacteristics(mas) {
   document.getElementById('chars-grid').innerHTML = html;
 }
 
-// ===== DOWNLOAD =====
+// ===== DOWNLOAD PDF =====
 function downloadResults() {
   const name = document.getElementById('user-name').value.trim();
-  const scores = window._discScores;
-  if (!scores) return;
-  const sorted = Object.entries(scores.mas).sort((a,b) => b[1]-a[1]);
-  let text = `RESULTADOS DISC - ${name}\nFecha: ${new Date().toLocaleDateString('es-CO')}\n${'='.repeat(40)}\n\n`;
-  text += `PERFIL PRIMARIO: ${sorted[0][0]} - ${dimInfo[sorted[0][0]].name}\n${dimInfo[sorted[0][0]].desc}\n\n`;
-  text += `PUNTAJES (Más como yo):\n`;
-  ['D','I','S','C'].forEach(d => { text += `  ${d} - ${dimInfo[d].name}: ${scores.mas[d]}\n`; });
-  text += `\nPUNTAJES (Menos como yo):\n`;
-  ['D','I','S','C'].forEach(d => { text += `  ${d} - ${dimInfo[d].name}: ${scores.menos[d]}\n`; });
-  text += `\nALTA DOMINANCIA: ${sorted[0][0]} - ${dimInfo[sorted[0][0]].name}`;
-  text += `\nBAJA DOMINANCIA: ${sorted[sorted.length-1][0]} - ${dimInfo[sorted[sorted.length-1][0]].name}\n`;
+  const element = document.getElementById('results-screen');
+  
+  // Clonar para no alterar la vista del usuario
+  const opt = {
+    margin: [10, 10, 10, 10],
+    filename: `Reporte_DISC_${name.replace(/\s+/g,'_')}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 2, 
+      useCORS: true, 
+      backgroundColor: '#0a0a0c',
+      logging: false
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
 
-  const blob = new Blob([text], {type:'text/plain'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `DISC_${name.replace(/\s+/g,'_')}.txt`; a.click();
+  // Ocultar botones de acción en el PDF
+  const actions = document.querySelector('.results-actions');
+  actions.style.display = 'none';
+
+  // Generar PDF
+  html2pdf().set(opt).from(element).save().then(() => {
+    actions.style.display = 'flex'; // Restaurar botones
+  });
 }
 
 function resetTest() {
