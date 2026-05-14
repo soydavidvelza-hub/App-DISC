@@ -237,16 +237,13 @@ function sendToWebhook(scores) {
     body: params
   })
   .then(() => {
-    console.log('✅ Webhook disparado');
-    alert('¡Test enviado a Make con éxito!');
+    console.log('✅ Webhook disparado exitosamente');
   })
   .catch(err => {
     console.error('❌ Error:', err);
   });
 }
 
-  window.scrollTo({top:0,behavior:'smooth'});
-}
 
 function renderProfileBadge(mas) {
   const sorted = Object.entries(mas).sort((a,b) => b[1]-a[1]);
@@ -411,5 +408,3 @@ function resetTest() {
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-  window.scrollTo({top:0,behavior:'smooth'});
-}
