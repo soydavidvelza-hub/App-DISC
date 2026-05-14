@@ -220,17 +220,21 @@ function sendToWebhook(scores) {
     }))
   };
 
+  console.log('🚀 Enviando datos a Make:', payload);
+
   fetch(WEBHOOK_URL, {
     method: 'POST',
+    mode: 'no-cors', // Añadimos esto para evitar problemas de CORS comunes en webhooks
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   })
   .then(res => {
-    if (res.ok) console.log('✅ Resultados enviados al webhook correctamente');
-    else console.warn('⚠️ Webhook respondió con status:', res.status);
+    console.log('✅ Webhook disparado (status:', res.status, ')');
+    alert('¡Test completado y enviado a Make con éxito!');
   })
   .catch(err => {
-    console.warn('⚠️ Error al enviar al webhook:', err.message);
+    console.error('❌ Error fatal en Webhook:', err);
+    alert('Hubo un error al enviar a Make: ' + err.message);
   });
 }
 
