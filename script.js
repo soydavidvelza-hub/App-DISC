@@ -220,21 +220,12 @@ function sendToWebhook(scores) {
     }))
   };
 
-  console.log('🚀 Enviando datos a Make (Form Format):', payload);
-
-  // Convertimos el objeto a formato de formulario para que Make lo separe solo
-  const params = new URLSearchParams();
-  for (const key in payload) {
-    if (typeof payload[key] === 'object') {
-      params.append(key, JSON.stringify(payload[key]));
-    } else {
-      params.append(key, payload[key]);
-    }
-  }
+  console.log('🚀 Enviando datos a Make (JSON):', payload);
 
   fetch(WEBHOOK_URL, {
     method: 'POST',
-    body: params
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
   })
   .then(() => {
     console.log('✅ Webhook disparado exitosamente');
