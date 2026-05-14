@@ -224,18 +224,30 @@ function sendToWebhook(scores) {
 
   fetch(WEBHOOK_URL, {
     method: 'POST',
-    mode: 'no-cors', // Añadimos esto para evitar problemas de CORS comunes en webhooks
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   })
-  .then(res => {
-    console.log('✅ Webhook disparado (status:', res.status, ')');
-    alert('¡Test completado y enviado a Make con éxito!');
+  .then(() => {
+    console.log('✅ Webhook disparado');
+    alert('¡Test enviado a Make con éxito!');
   })
   .catch(err => {
-    console.error('❌ Error fatal en Webhook:', err);
-    alert('Hubo un error al enviar a Make: ' + err.message);
+    console.error('❌ Error:', err);
   });
+}
+
+// ===== TEST WEBHOOK (MOCK DATA) =====
+function sendTestData() {
+  const dummyScores = {
+    mas: { D: 18, I: 12, S: 4, C: 2 },
+    menos: { D: 1, I: 3, S: 15, C: 14 }
+  };
+  const nameEl = document.getElementById('user-name');
+  const emailEl = document.getElementById('user-email');
+  if (!nameEl.value) nameEl.value = 'Usuario de Prueba';
+  if (!emailEl.value) emailEl.value = 'prueba@make.com';
+  
+  sendToWebhook(dummyScores);
 }
 
 function renderProfileBadge(mas) {
