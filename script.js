@@ -375,39 +375,54 @@ function renderCharacteristics(mas) {
 function downloadResults() {
   const name = document.getElementById('user-name').value.trim();
   const element = document.getElementById('results-screen');
-
-  // Activar modo claro para el PDF
-  element.classList.add('pdf-mode');
-
-  // Ocultar botones de acción en el PDF
   const actions = document.querySelector('.results-actions');
   actions.style.display = 'none';
-
-  // Re-renderizar el gráfico con fondo claro
-  const canvas = document.getElementById('disc-chart');
-  const ctx = canvas.getContext('2d');
-  renderChartForPDF(ctx, canvas);
 
   const opt = {
     margin: [10, 10, 10, 10],
     filename: `Reporte_DISC_${name.replace(/\s+/g,'_')}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { 
-      scale: 2, 
-      useCORS: true, 
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
       backgroundColor: '#ffffff',
-      logging: false
+      logging: false,
+      onclone: function(clonedDoc) {
+        // Aplicar tema claro directamente al clon (sin race condition)
+        const clonedScreen = clonedDoc.getElementById('results-screen');
+        clonedScreen.style.background = '#ffffff';
+        clonedScreen.style.color = '#1a1a2e';
+
+        // Forzar estilos en todos los elementos del clon
+        const allEls = clonedScreen.querySelectorAll('*');
+        allEls.forEach(el => {
+          const computed = window.getComputedStyle(el);
+          const bg = computed.backgroundColor;
+          const color = computed.color;
+
+          // Reemplazar fondos oscuros por blanco/gris claro
+          if (bg === 'rgb(10, 10, 15)' || bg === 'rgb(18, 18, 26)' || bg === 'rgb(26, 26, 46)') {
+            el.style.backgroundColor = '#f5f5f8';
+          }
+          // Reemplazar texto claro por texto oscuro
+          if (color === 'rgb(232, 232, 240)' || color === 'rgb(136, 136, 160)') {
+            el.style.color = '#1a1a2e';
+          }
+        });
+
+        // Redibujar el canvas en el clon con fondo claro
+        const clonedCanvas = clonedDoc.getElementById('disc-chart');
+        if (clonedCanvas && window._discScores) {
+          const clonedCtx = clonedCanvas.getContext('2d');
+          renderChartForPDF(clonedCtx, clonedCanvas);
+        }
+      }
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  // Generar PDF
   html2pdf().set(opt).from(element).save().then(() => {
-    // Restaurar tema oscuro
-    element.classList.remove('pdf-mode');
     actions.style.display = 'flex';
-    // Re-renderizar gráfico con tema oscuro
-    if (window._discScores) renderChart(window._discScores);
   });
 }
 
