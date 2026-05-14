@@ -245,18 +245,7 @@ function sendToWebhook(scores) {
   });
 }
 
-// ===== TEST WEBHOOK (MOCK DATA) =====
-function sendTestData() {
-  const dummyScores = {
-    mas: { D: 18, I: 12, S: 4, C: 2 },
-    menos: { D: 1, I: 3, S: 15, C: 14 }
-  };
-  const nameEl = document.getElementById('user-name');
-  const emailEl = document.getElementById('user-email');
-  if (!nameEl.value) nameEl.value = 'Usuario de Prueba';
-  if (!emailEl.value) emailEl.value = 'prueba@make.com';
-  
-  sendToWebhook(dummyScores);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function renderProfileBadge(mas) {
