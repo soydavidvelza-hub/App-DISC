@@ -400,3 +400,20 @@ function resetTest() {
   document.getElementById('welcome-screen').classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+// ===== TEST WEBHOOK (MOCK DATA) =====
+function sendTestData() {
+  const dummyScores = {
+    mas: { D: 15, I: 8, S: 5, C: 2 },
+    menos: { D: 2, I: 4, S: 10, C: 12 }
+  };
+  
+  // Llenamos el nombre y email temporalmente si están vacíos
+  const nameEl = document.getElementById('user-name');
+  const emailEl = document.getElementById('user-email');
+  if (!nameEl.value) nameEl.value = 'Usuario de Prueba';
+  if (!emailEl.value) emailEl.value = 'prueba@webhook.com';
+  
+  alert('Enviando datos de prueba a Make...');
+  sendToWebhook(dummyScores);
+}
