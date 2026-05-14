@@ -375,8 +375,19 @@ function renderCharacteristics(mas) {
 function downloadResults() {
   const name = document.getElementById('user-name').value.trim();
   const element = document.getElementById('results-screen');
-  
-  // Clonar para no alterar la vista del usuario
+
+  // Activar modo claro para el PDF
+  element.classList.add('pdf-mode');
+
+  // Ocultar botones de acción en el PDF
+  const actions = document.querySelector('.results-actions');
+  actions.style.display = 'none';
+
+  // Re-renderizar el gráfico con fondo claro
+  const canvas = document.getElementById('disc-chart');
+  const ctx = canvas.getContext('2d');
+  renderChartForPDF(ctx, canvas);
+
   const opt = {
     margin: [10, 10, 10, 10],
     filename: `Reporte_DISC_${name.replace(/\s+/g,'_')}.pdf`,
@@ -384,19 +395,72 @@ function downloadResults() {
     html2canvas: { 
       scale: 2, 
       useCORS: true, 
-      backgroundColor: '#0a0a0c',
+      backgroundColor: '#ffffff',
       logging: false
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  // Ocultar botones de acción en el PDF
-  const actions = document.querySelector('.results-actions');
-  actions.style.display = 'none';
-
   // Generar PDF
   html2pdf().set(opt).from(element).save().then(() => {
-    actions.style.display = 'flex'; // Restaurar botones
+    // Restaurar tema oscuro
+    element.classList.remove('pdf-mode');
+    actions.style.display = 'flex';
+    // Re-renderizar gráfico con tema oscuro
+    if (window._discScores) renderChart(window._discScores);
+  });
+}
+
+// Gráfico especial para PDF (fondo claro, texto oscuro)
+function renderChartForPDF(ctx, canvas) {
+  const scores = window._discScores;
+  if (!scores) return;
+  const data = currentChart === 'mas' ? scores.mas : scores.menos;
+  const dpr = 2;
+  canvas.width = 600 * dpr; canvas.height = 320 * dpr;
+  canvas.style.width = '600px'; canvas.style.height = '320px';
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, 600, 320);
+
+  // Fondo blanco
+  ctx.fillStyle = '#f5f5f8';
+  ctx.fillRect(0, 0, 600, 320);
+
+  const dims = ['D','I','S','C'];
+  const colors = { D:'#ef4444', I:'#f59e0b', S:'#22c55e', C:'#3b82f6' };
+  const maxVal = Math.max(...Object.values(data), 7);
+  const barW = 80, gap = 50, startX = (600 - (dims.length * barW + (dims.length-1) * gap)) / 2;
+  const chartH = 230, baseY = 280;
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)'; ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = baseY - (chartH * (i / 4));
+    ctx.beginPath(); ctx.moveTo(startX-20, y); ctx.lineTo(startX + dims.length*(barW+gap), y); ctx.stroke();
+    ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.font = '11px Inter';
+    ctx.fillText(Math.round(maxVal * i / 4), startX - 35, y + 4);
+  }
+
+  dims.forEach((d, i) => {
+    const x = startX + i * (barW + gap);
+    const val = data[d];
+    const h = (val / maxVal) * chartH;
+
+    const grad = ctx.createLinearGradient(x, baseY - h, x, baseY);
+    grad.addColorStop(0, colors[d]); grad.addColorStop(1, colors[d] + '66');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.roundRect(x, baseY - h, barW, h, [8,8,0,0]); ctx.fill();
+
+    // Value label (dark text)
+    ctx.fillStyle = '#1a1a2e'; ctx.font = 'bold 16px Space Grotesk'; ctx.textAlign = 'center';
+    ctx.fillText(val, x + barW/2, baseY - h - 10);
+
+    // Dimension label
+    ctx.fillStyle = colors[d]; ctx.font = 'bold 18px Space Grotesk';
+    ctx.fillText(d, x + barW/2, baseY + 22);
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.font = '11px Inter';
+    ctx.fillText(dimInfo[d].name, x + barW/2, baseY + 38);
+    ctx.textAlign = 'start';
   });
 }
 
